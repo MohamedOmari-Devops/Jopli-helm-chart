@@ -1,0 +1,9 @@
+apiVersion: v2
+name: joplin
+description: A Helm chart for Joplin with PostgreSQL
+version: 0.1.0
+appVersion: "2.8.1" # Update as necessary
+dependencies:
+  - name: postgresql
+    version: 15.0.0 # Specify the PostgreSQL version
+    repository: https://charts.bitnami.com/bitnami

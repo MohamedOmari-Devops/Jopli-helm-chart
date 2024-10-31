@@ -1,0 +1,25 @@
+replicaCount: 1
+
+image:
+  repository: joplin/server
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 22300
+
+persistence:
+  enabled: true
+  storageClass: standard # Specify your storage class
+  accessModes:
+    - ReadWriteOnce
+  size: 1Gi
+
+postgresql:
+  postgresqlUsername: joplin
+  postgresqlPassword: joplinpassword
+  postgresqlDatabase: joplin
+  service:
+    port: 5432
+  

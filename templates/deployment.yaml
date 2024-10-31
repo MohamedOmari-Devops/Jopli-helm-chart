@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-joplin
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-joplin
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-joplin
+    spec:
+      containers:
+        - name: joplin
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          ports:
+            - containerPort: 22300
+          env:
+            - name: DATABASE_TYPE
+              value: "postgres"
+            - name: POSTGRES_HOST
+              value: {{ .Release.Name }}-postgresql
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_USER
+              value:  {{ .Values.postgresql.postgresqlUsername }}
+            - name: POSTGRES_PASSWORD
+              value:  {{ .Values.postgresql.postgresqlPassword }}
+            - name: POSTGRES_DB
+              value: {{ .Values.postgresql.postgresqlDatabase }}
+          volumeMounts:
+            - name: joplin-storage
+              mountPath: /var/joplin
+      volumes:
+        - name: joplin-storage
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-joplin-pvc
